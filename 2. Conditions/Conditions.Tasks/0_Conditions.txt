@@ -1,0 +1,89 @@
+My week routine
+if Weekdays:
+	7:30 morning routine
+	8:30 drop-off son to school
+	9:30 work
+	1:00 lunch time
+	5:00 pick-up son from school
+	if Tuesday:
+		drive to swim school
+	elif:
+		drive to home
+		6:00 homework with son
+	7:30 evening routine
+	11:30 bed time
+
+elif Weekends:
+	8:00 morning routine
+	if Saturday:
+		8:45 drop-off son to Saturday school
+		9:15 shopping, household chores
+		2:00 pick-up son from school
+	elif:
+		9:00 family time
+	3:00 lunch
+	3:30 leisure time
+	6:00 evening routine
+	11:30 bed time
+
+
+User authorization on website
+start
+open site
+click the authorization icon
+(here it may be possible to log in using login and password or through an account on Google, Facebook, etc.)
+if login through login/password:
+	enter login to the field for login
+	enter password to the field for password
+	click login button
+	if login true:
+		user has been successfully authorized on the site
+		
+	elif:
+		user receives an authorization error message
+		user can try again
+elif:
+	click button for authorization through an account on Google, Facebook, etc.
+	pass automatic authorization
+end
+
+
+Access to content by subscription (we assume that the user has a valid subscription to paid content)
+start
+user authorization
+if login true:
+	user has been successfully authorized on the site
+	user goes to the subscription content
+	user is shown the subscription content
+elif:
+	user receives an authorization error message
+	user can try again
+
+
+Purchase discount item on website (we assume that the user is already logged in to the website)
+user goes to the product catalog
+if user desired product that has a discount:
+	user adds the product to the cart
+	user goes to the cart
+	user sees the payment amount with the discount
+	user clicks the button to place an order
+	user goes to the page for entering information about delivery and payment
+	user enters the delivery address
+	user enters payment details
+	user clicks the button to pay
+ 	if payment was successful:
+		user sees a message that the order has been formed and payment has been made
+	elif:
+		user sees a message that the payment was declined and offers to use another payment method
+
+Timer
+user enters the timer duration (hours, minutes, seconds)
+while True:
+	if timer duration > 0:
+		display timer duration
+		wait one second
+		timer duration - 1
+	elif:
+		display "Timer is ended!"
+		break
+
