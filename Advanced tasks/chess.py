@@ -21,58 +21,48 @@ def check(piece, startPosition, endPosition):
         if piece == 'king':
             for x in range(startX - 1, startX + 2):
                 for y in range(startY - 1, startY + 2):
-                    possibleCoordinate.append((x,y))
+                    possibleCoordinate.append((x, y))
 
-
-        elif piece == 'rook':
+        if piece == 'rook' or piece == 'queen':
             for y in range(0, 8):
                 x = startX
-                possibleCoordinate.append((x,y))
+                possibleCoordinate.append((x, y))
             for x in range(0, 8):
                 y = startY
-                possibleCoordinate.append((x,y))
+                possibleCoordinate.append((x, y))
 
-        elif piece == 'bishop':
-            y = startY
-            for x in range(startX + 1, 7):
-                y = startY + 1
-                possibleCoordinate.append((x + 1, y + 1))
-            for x in range(startX + 1, 7):
-                y = startY
-                possibleCoordinate.append((x + 1, y - 1))
-            for y in range(0, startY):
-                possibleCoordinate.append((x - 1, y + 1))
-            for y in range(0, startY):
-                possibleCoordinate.append((x - 1, y - 1))
+        if piece == 'bishop' or piece == 'queen':
+            for x in range(1, 7):
+                possibleCoordinate.append((startX - x, startY + x))
+                possibleCoordinate.append((startX + x, startY + x))
+                possibleCoordinate.append((startX - x, startY - x))
+                possibleCoordinate.append((startX + x, startY - x))
 
-            
+        if piece == 'pawn':
+                if startY == 1:
+                    possibleCoordinate.append((startX, startY + 2))
+                possibleCoordinate.append((startX, startY + 1))
+
+        if piece == 'knight':
+            possibleCoordinate.append((startX + 2, startY - 1))
+            possibleCoordinate.append((startX + 2, startY + 1))
+            possibleCoordinate.append((startX - 2, startY - 1))
+            possibleCoordinate.append((startX - 2, startY + 1))
+
+            possibleCoordinate.append((startX + 1, startY + 2))
+            possibleCoordinate.append((startX - 1, startY + 2))
+            possibleCoordinate.append((startX + 1, startY - 2))
+            possibleCoordinate.append((startX - 1, startY - 2))            
+
         print(f"Possible coordinates: {possibleCoordinate}")
         if checkCoordinate in possibleCoordinate:
             print("YES")
+            if piece == 'pawn' and endY == 7:
+                print("Congratulations! Your pawn becomes a queen at this step!")
             return True
         else:
             print("NO")
             return False
-                
-    '''
-    elif piece == 'queen':
-        for x in range(column[0], column[8]):
-            possibleCoordinate.append((x,startY))
-        for y in range(column[0], column[8]):
-            possibleCoordinate.append((x,startY))
-        print(f"Possible coordinates: {possibleCoordinate}")
-        if checkCoordinate in possibleCoordinate:
-            print("YES")
-        else:
-            print("NO")
-
-        '''
-
-
-    '''
-    elif piece == ' knight':
-    elif piece == ' pawn':'''
-
 
 if __name__ == '__main__':
     piece = input("Choose your piece: " )
