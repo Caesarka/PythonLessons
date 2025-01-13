@@ -1,42 +1,42 @@
 PROMO_CODE = "PROMO2025"
-discountForFiveMoreItems = 0.05
-discountForTenMoreItems = 0.1
-discountForCode = 0.07
-discount = 0
+dict = {
+    'discountForFiveMoreItems': 0.05,
+    'discountForPromoCode': 0.07,
+    'discountForTenMoreItems': 0.12
+    }
 
 def promoCodeCalc():
-    promoByQuantity = 0
-    finalPromo = 0
+    print("Let's calculate the amount of discount and the final price for your purchases")
+    discount = 0
     while True:
         while True:
             try:
                 price = float(input("Enter price: "))
                 quantity = int(input("Enter quantity: "))
-                if quantity > 5 and quantity <= 10:
-                    promoByQuantity = discountForFiveMoreItems
+                if quantity <= 10:
+                    if quantity > 5 and quantity <= 10:
+                        discount = dict["discountForFiveMoreItems"]
+                    promo = input("Do you have the promo code? Y/N: ")
+                    while True:
+                        if promo == 'Y':
+                            promoCode = input("Please enter the promo code: ")
+                            if promoCode == PROMO_CODE:
+                                discount = dict["discountForPromoCode"]
+                                break
+                            else:
+                                usrInputWrongCode = input("Oh no! Your promo code is not valid! Please try again (a) or continue without promo code (q). "),
+                                if usrInputWrongCode == 'q':
+                                    break
+                        else:
+                            break
                 elif quantity > 10:
-                    promoByQuantity = discountForTenMoreItems
-                discount = promoByQuantity
-                break
+                    discount = dict["discountForTenMoreItems"]
             except:
-                print("Price and quantity should be entered like a number. Please try again.")
-                usrInput = input("Press any key to continue or q to exit ")
-            if usrInput == 'q':
-                return
-        promo = input("Do you have the promo code? Y/N: ")
-        while True:
-            if promo == 'Y':
-                promoCode = input("Please enter the promo code: ")
-                if promoCode == PROMO_CODE:
-                    if discount == 0 or discount == discountForFiveMoreItems:
-                        discount = discountForCode
-                    totalPrice = price * quantity * (1 - discount)
-                    print(f"Total price: ${totalPrice}. Your discount is {round(discount * 100)}% and equal ${round(price * quantity * discount, 2)}")
-                    break
-                else:
-                    usrInput = input("Oh no! Your promo code is not valid! Please try again (a) or continue without promo code (q). ")
-                    if usrInput == 'q':
-                        break
+                
+                usrImputWrongData =  input("Press any key to continue or q to exit "),
+                if usrImputWrongData == 'q':
+                    return
+
             totalPrice = price * quantity * (1 - discount)
             if discount > 0:
                 print(f"Total price: ${totalPrice}. Your discount is {round(discount * 100)}% and equal ${round(price * quantity * discount, 2)}")
@@ -45,6 +45,10 @@ def promoCodeCalc():
                 totalPrice = price * quantity
                 print(f"Total price: ${totalPrice}.")
                 break
-        usrInput = input("Press any key to continue or q to exit ")
-        if usrInput == 'q':
-            break
+        discount = 0
+        usrInputExit = input("Press any key to continue or q to exit ")
+        if usrInputExit == 'q':
+            return
+
+if __name__ == '__main__':
+    promoCodeCalc()
