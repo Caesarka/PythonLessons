@@ -1,21 +1,24 @@
+#from . import RealConsole
+import console
+
 column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 ##row = [1, 2, 3, 4, 5, 6, 7, 8]
 
-def check(piece, startPosition, endPosition):
+def check(piece, startPosition, endPosition, console: console.ConsoleInterface):
     startPositionX, _, startPositionY = startPosition.partition(',')
     startX = column.index(startPositionX)
     startY = int(startPositionY) - 1
-    print(f"{startX}, {startY}")
+    console.print(f"{startX}, {startY}")
 
     endPositionX, _, endPositionY = endPosition.partition(',')
     endX = int(column.index(endPositionX))
     endY = int(endPositionY) - 1
     checkCoordinate = (endX,endY)
-    print(f"Check Coordinate = {checkCoordinate}")
+    console.print(f"Check Coordinate = {checkCoordinate}")
     possibleCoordinate = []
 
     if endX == startX and endY == startY:
-        print("You can not choose this position because you are already here")
+        console.print("You can not choose this position because you are already here")
         return False
     else:
         if piece == 'king':
@@ -54,19 +57,22 @@ def check(piece, startPosition, endPosition):
             possibleCoordinate.append((startX + 1, startY - 2))
             possibleCoordinate.append((startX - 1, startY - 2))            
 
-        print(f"Possible coordinates: {possibleCoordinate}")
+        console.print(f"Possible coordinates: {possibleCoordinate}")
         if checkCoordinate in possibleCoordinate:
-            print("YES")
+            console.print("YES")
             if piece == 'pawn' and endY == 7:
-                print("Congratulations! Your pawn becomes a queen at this step!")
+                console.print("Congratulations! Your pawn becomes a queen at this step!")
             return True
         else:
-            print("NO")
+            console.print("NO")
             return False
 
-if __name__ == '__main__':
-    piece = input("Choose your piece: " )
-    startPosition = input(f"Enter start position for your {piece}, f.e. a,1 : ")
-    endPosition = input(f"Enter position where you want to place the {piece}, f.e. a,1 : ")
+def worker(console: console.ConsoleInterface):
+    piece = console.input("Choose your piece: " )
+    startPosition = console.input(f"Enter start position for your {piece}, f.e. a,1 : ")
+    endPosition = console.input(f"Enter position where you want to place the {piece}, f.e. a,1 : ")
 
-    check(piece, startPosition, endPosition)
+    check(piece, startPosition, endPosition, console)
+
+if __name__ == '__main__':
+    worker(console.RealConsole())
