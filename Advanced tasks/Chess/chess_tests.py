@@ -1,5 +1,5 @@
 import unittest
-import chess
+import Chess.chess as chess
 import console
 
 class FakeConsole(console.ConsoleInterface):
