@@ -1,5 +1,3 @@
-
-import math
 print("Let's find total price.")
 while True:
     rubles = int(input("Enter the price for one piece of pie, rubles: "))

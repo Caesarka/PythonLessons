@@ -19,8 +19,7 @@ while k >= 0:
 print("Poleteli!")
 '''
 
-
-
+'''
 
 from random import randint
 
@@ -52,3 +51,18 @@ while True:
     usrInput = input("Let's try again? Y/N: ")
     if usrInput != "Y":
         break
+'''
+import random
+index = int(input("Enter index: "))
+a = 1
+b = 1
+i = 1
+while i <= index:
+    sum = a + b
+    a = b
+    b = sum
+    i += 1
+    if i == index: break
+
+
+print(b)
