@@ -1,4 +1,4 @@
-print("Let's find total price.")
+﻿print("Let's find total price.")
 while True:
     rubles = int(input("Enter the price for one piece of pie, rubles: "))
     coins = int(input("Enter the price for one piece of pie, coins: "))
