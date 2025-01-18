@@ -1,4 +1,4 @@
-import unittest
+﻿import unittest
 import chess
 
 class TestStringMethods(unittest.TestCase):
