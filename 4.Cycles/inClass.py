@@ -51,7 +51,7 @@ while True:
     usrInput = input("Let's try again? Y/N: ")
     if usrInput != "Y":
         break
-'''
+
 import random
 index = int(input("Enter index: "))
 a = 1
@@ -66,3 +66,24 @@ while i <= index:
 
 
 print(b)
+
+'''
+
+numbers = []
+count = 0
+
+print("Enter numbers. To exit, press Enter:")
+
+while True:
+    user_input = input()
+    if user_input == "":
+        break
+    numbers.append(int(user_input))
+
+i = 1
+while i < len(numbers):
+    if numbers[i] > numbers[i - 1]:
+        count += 1
+    i += 1
+
+print("Number of elements greater than the previous one:", count)
