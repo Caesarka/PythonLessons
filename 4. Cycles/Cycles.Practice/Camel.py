@@ -9,7 +9,7 @@ print("""Добро пожаловать в игру Верблюд!
 class Game:
     done = False
     distance = 0
-    thirst_level = 0
+    thirst_level = 4
     fatigue = 0
     enemy_distance = -20
     sips_water_count = 3
@@ -55,11 +55,11 @@ Q. Выйти из игры.\n""")
             print("\nВы утолили жажду!")
         else:
             print("\nУ вас нет воды..")
-    if randint(1, 20) == 1:
+    if 1 == 1:
         print("Вы нашли оазис!")
-        sips_water_count = 3
-        thirst_level = 0
-        fatigue = 0
+        new_game.sips_water_count = 3
+        new_game.thirst_level = 0
+        new_game.fatigue = 0
         new_game.enemy_distance += randint(7, 14)
         print(f"\nВерблюд доволен! Туземцы находятся на расстоянии {new_game.distance - new_game.enemy_distance} миль от вас.")
     if new_game.thirst_level >= 4 and new_game.thirst_level <= 6:
