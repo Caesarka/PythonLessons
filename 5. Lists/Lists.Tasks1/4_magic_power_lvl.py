@@ -1,5 +1,4 @@
 from random import randint
-import copy
 
 print("Let's give Argus his place in the ranks of mages.")
 
