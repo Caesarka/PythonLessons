@@ -1,4 +1,7 @@
 from random import randint
+from tkinter import *
+from tkinter import Tk
+from PIL import ImageTk, Image
 
 print("""Добро пожаловать в игру Верблюд!
 Вы украли верблюда, чтобы пересечь великую пустыню Гоби.
@@ -55,7 +58,7 @@ Q. Выйти из игры.\n""")
             print("\nВы утолили жажду!")
         else:
             print("\nУ вас нет воды..")
-    if 1 == 1:
+    if randint(1, 20) == 1:
         print("Вы нашли оазис!")
         new_game.sips_water_count = 3
         new_game.thirst_level = 0
@@ -80,5 +83,3 @@ Q. Выйти из игры.\n""")
     if new_game.distance >= 200:
         print(f"Вы проехали {new_game.distance} миль. Вы пересекли пустыню! Вы победили!")
         new_game.done = True
-    
-    
