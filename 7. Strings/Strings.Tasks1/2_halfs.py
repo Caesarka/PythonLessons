@@ -1,0 +1,7 @@
+print('Let\'s switch the words around.')
+words = input('Enter words, use space as delimiter: ')
+lst = words.split()
+lst.reverse()
+new_order = ' '.join(lst)
+new_order = new_order.capitalize()
+print("New order: ", new_order)
