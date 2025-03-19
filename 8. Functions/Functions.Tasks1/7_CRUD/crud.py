@@ -1,8 +1,6 @@
 from random import randint
 import os
 
-book_list = []
-
 def make_choice():
     while True:
         choice = input(
@@ -19,24 +17,33 @@ Your choice: ''').lower()
             print('Invalid choice. Please try again.')
 
 def create(name):
-    text = open('random_text.txt')
-    source = text.read().splitlines()
-    line_num = randint(0, len(source) - 1)
-    book_text = source[line_num]
-
+    global book_list
+    book_text = generate_book_text()
     book = open(f'{name}.txt', 'w')
     book.write(f'{randint(10000, 99999)}\n')
     book.write('Some Author\n')
     book.write(f'{randint(1200, 2025)}\n')
     book.write(book_text)
+    book.flush()
+    book.close()
+
     book_list.append(name)
+
     book_titles = open('book_titles.txt', 'a')
     book_titles.write(f'{name}\n')
     print(f'Book with title \'{name}\' was successfully added to the library catalog.\n')
 
-    text.close()
-    book.close()
     book_titles.close()
+
+def generate_book_text():
+    text = open('random_text.txt', 'r')
+    try:
+        source = text.read().splitlines()
+        line_num = randint(0, len(source) - 1)
+        line = source[line_num]
+        return line
+    finally:
+        text.close()
 
 def enter_unique_name():
     name = input('Enter the name of book: ')
@@ -46,60 +53,54 @@ def enter_unique_name():
 
 def read():
     print('\nBooks available for reading:')
-    name = choose_book()
+    name, index = choose_book()
     book = open(f'{name}.txt', 'r')
     line = book.readline()
+    
+    print()
+    
     while line:
         print(line, end='')
         line = book.readline()
     print('\n')
+    
     book.close()
-    return 0
 
 def update():
     print('\nBooks available for updating:')
-    name = choose_book()
-    new_name = input('Enter a new name: ')
+    
+    name, index = choose_book()
+    new_name = enter_unique_name()
     source = f'{name}.txt'
     dest = f'{new_name}.txt'
     os.rename(source, dest)
+    
     for i in range(0, len(book_list) - 1):
         if book_list[i] == name:
             book_list[i] = new_name
-    print('Name was successfully changed.')
-    return 0
+            
+    update_index_file_from_list()
+    print('Name was successfully changed.\n')
 
 def delete():
     print('\nBooks available for deleting:')
-    name = choose_book()
+    
+    name, index = choose_book()
     sure = input('Are you sure? This action deletes book permanently. y/n: ')
+    
     if sure == 'y':
-        os.remove(f'{name[0 : -1]}.txt')
-        for i in range(0, len(book_list) - 1):
-            if book_list[i] == name:
-                book_list.remove(name)
-    return 0
-
-def transmit(choice):
-    if choice == 'c':
-        name = enter_unique_name()
-        create(name)
-    
-    elif choice == 'r':
-        read()
-    
-    elif choice == 'u':
-        update()
-    
-    elif choice == 'd':
-        delete()
-    
-    elif choice =='q':
-        return False
-    return True
+        book_list.remove(name)
+        update_index_file_from_list()
     
 def fill_list():
+    global book_list
+    book_list = []
+    
+    if not os.path.exists('book_titles.txt'):
+        return
+    
     book_titles = open('book_titles.txt', 'r')
+    
     try:
         while True:
             line = book_titles.readline()
@@ -109,24 +110,39 @@ def fill_list():
                 break
     finally:
         book_titles.close()
-    print(book_list)
+
+def update_index_file_from_list():
+    book_titles = open('book_titles.txt', 'w')
+    
     for el in book_list:
-        print(f'*{el}')
+        book_titles.write(f'{el}\n')
 
 def choose_book():
     for i in range(0, len(book_list)):
         print(f'{i}. {book_list[i]}')
-    name = int(input('Enter the book number: '))
-    return book_list[name]
+        
+    index = int(input('Enter the book number: '))
+    
+    return book_list[index], index
 
 def main_program():
     fill_list()
     print('Hello, this is library catalog.')
+    transmit = {
+        'c': lambda: create(enter_unique_name()),
+        'r': read,
+        'u': update,
+        'd': delete,
+    }
+    
     while True:
         choice = make_choice()
-        if not transmit(choice):
+        if choice == 'q':
             break
+        
+        transmit.get(choice, lambda: print('This f-n is not available') )()
 
+book_list = []
 
 if __name__ == '__main__':
     main_program()
