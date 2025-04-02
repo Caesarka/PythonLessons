@@ -1,6 +1,6 @@
-import math
+from collections import deque
 from random import randint, sample
-import sys
+
 
 
 def sqrt(lst):
@@ -16,8 +16,8 @@ def sqrt(lst):
                 cur = next
                 next = var
                 reversed = True
-            lst[x] = cur
-            lst[x + 1] = next
+            lst[x] = pow(cur, 2)
+            lst[x + 1] = pow(next,2 )
             x += 1
         if reversed == False:
             print(f'List sorted by abs value {lst}')
@@ -25,6 +25,28 @@ def sqrt(lst):
                 lst[y] *= lst[y]
             break
     return lst
+
+
+def sqrt2(lst):
+    n = len(lst)
+    sorted_lst = [0] * n
+    left = 0
+    right = n - 1
+    pos = n - 1
+    while left <= right:
+        if abs(lst[left]) > abs(lst[right]):
+            sorted_lst[pos] = pow(lst[left] , 2)
+            left += 1
+        else:
+            sorted_lst[pos] = pow(lst[right], 2)
+            right -= 1
+        pos -= 1
+
+    return sorted_lst
+
+
+deque
+
 
 
 
@@ -72,6 +94,6 @@ arr.sort()
 print(arr)
 string = 'AAABBBBSSCCEEEYYY'
 
-print(sqrt(arr))
-print(f'GPT: {sorted_squares(arr)}')
-print(convert_string(string))
+print(sqrt2(arr))
+#print(f'GPT: {sorted_squares(arr)}')
+#print(convert_string(string))
