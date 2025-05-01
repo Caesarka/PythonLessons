@@ -1,0 +1,26 @@
+from random import randint
+
+print("Hello! This program can determine whether there is a subset in a matrix or not.")
+
+x = int(input("Enter size for the first dimention of the matrix: "))
+y = int(input("Enter size for the second dimention of the matrix: "))
+
+matrix = [[randint(1, 100) for _ in range(x)] for _ in range(y)]
+
+for i in range(y):
+    for j in range(x):
+        print(str(matrix[i][j]).rjust(3), end=' ')
+    print()
+
+string = input("Enter subset: ")
+
+subset = [int(sub) for sub in string.split(' ')]
+
+flag = False
+
+for i in range(y):
+    if matrix[i] == subset:
+        flag = True
+
+print(flag)
+    
