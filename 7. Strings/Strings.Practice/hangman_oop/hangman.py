@@ -1,6 +1,50 @@
 import random
 from tkinter import *
+from tkinter import ttk
 from PIL import ImageTk, Image
+
+steps = [
+    {
+        'type': 'wide_line',
+        'coords': (50, 250, 150, 250)
+    },
+    {
+        'type': 'wide_line',
+        'coords': (100, 250, 100, 50)
+    },
+    {
+        'type': 'wide_line',
+        'coords': (100, 50, 150, 50)
+    },
+    {
+        'type': 'wide_line',
+        'coords': (150, 50, 150, 80)
+    },
+    {
+        'type': 'oval',
+        'coords': (135, 80, 165, 110)
+    },
+    {
+        'type': 'narrow_line',
+        'coords': (150, 110, 150, 170)
+    },
+    {
+        'type': 'narrow_line',
+        'coords': (150, 120, 130, 150)
+    },
+    {
+        'type': 'narrow_line',
+        'coords': (150, 120, 170, 150)
+    },
+    {
+        'type': 'narrow_line',
+        'coords': (150, 170, 130, 200)
+    },
+    {
+        'type': 'narrow_line',
+        'coords': (150, 170, 170, 200)
+    }
+]
 
 
 class FrameConstructor:
@@ -33,72 +77,85 @@ class FrameConstructor:
                         column=self.pos.get('column', 0))
 
 
-class MenuGame:
-    def __init__(self, root):
-        self.menu = Frame(root)
-        self.menu.pack()
-        self.btn_new_game = Button(self.menu, text='new game')
-        # self.btn_new_game.bind('<Button-1>', self.start_new_game)
-        self.btn_new_game.grid()
+class Menu:
+    def __init__(self, root_frame):
+        self.menu = Frame(root_frame)
+        self.menu.pack(fill='x', side='top')
+        self.game = None
+        self.root_frame = root_frame
 
-#    def start_new_game():
-#        if word is not None:
-#            word.frame.destroy()
-#        word = Word(root)
-#        print(word)
+        self.btn_new_game = Button(self.menu, text='new game')
+        self.btn_new_game.bind('<Button-1>', self.start_new_game)
+        self.btn_new_game.grid(padx=(10, 0), row=0, column=0)
+
+    def start_new_game(self, x):
+        if self.game is not None:
+            self.game.game_frame.destroy()
+            self.game = None
+        self.game = Game(self.root_frame)
+
+    def get_word(word):
+        word.current_word
 
 
 class Game:
-    def __init__(self, root, word):
-        self.game = Frame(root, bd=5, width=500, height=300)
-        self.game.pack()
-        self.man = ManCanvas(self.game, width=200, height=200,
+    def __init__(self, parent_frame):
+        self.game_frame = Frame(parent_frame, bd=5, width=500, height=300)
+        self.game_frame.pack()
+
+        self.man = ManCanvas(self.game_frame, width=200, height=200,
                              bg='red', bd=0, pos={'row': 0})
         self.man.create_frame()
         self.man.render(self.man.method)
+        self.word = Word(self, self.game_frame)
+        self.word.choose_word(self.game_frame)
         self.keyboard = Keyboard(
-            self.game, word, width=250, height=300, bd=0, pos={'column': 1})
+            self.game_frame, self.word, width=250, height=300, bd=0, pos={'column': 1})
         self.keyboard.create_frame()
         self.keyboard.render(self.keyboard.method)
-        self.label = Label(justify='center')
-        self.label.pack()
+        self.keyboard.create_keyboard_btn()
+        self.label = Label(self.game_frame, justify='center')
+        self.label.grid(row=2, column=0, columnspan=3)
 
     def resume_game(self):
-        print(f"Mask: {word.word_mask}")
-        print(f"Word: {word.current_word}")
-        print(f"True or False: {word.word_mask == word.current_word}")
-        if word.step_count == len(steps) or word.word_mask == word.current_word:
+        print(f"Mask: {self.word.word_mask}")
+        print(f"Word: {self.word.current_word}")
+        print(
+            f"True or False: {self.word.word_mask == self.word.current_word}")
+        if self.word.step_count == len(steps) or self.word.word_mask == self.word.current_word:
             for btn in self.keyboard.buttons:
                 btn.unbind('<Button-1>')
                 btn.config(state='disabled')
 
     def set_game_label(self):
-        if word.word_mask == word.current_word:
+        if self.word.word_mask == self.word.current_word:
             self.label.config(text='Congradulation!',
                               fg='green', font=('Arial', 24, 'bold'))
-        if word.step_count == len(steps):
+        if self.word.step_count == len(steps):
             self.label.config(text='You lost!', fg='red',
                               font=('Arial', 24, 'bold'))
-            word.lbl_word.config(text=' '.join(word.current_word))
+            self.word.lbl_word.config(text=' '.join(self.word.current_word))
 
 
 class ManCanvas(FrameConstructor):
-    def __init__(self, frame, **config):
-        super().__init__(frame, **config)
+
+    def __init__(self, game_frame, **config):
+        super().__init__(game_frame, **config)
         self.figures = {
-            'wide_line': lambda coord: game.man.canvas.create_line(coord, width=5),
-            'oval': lambda coord: game.man.canvas.create_oval(coord, width=5),
-            'narrow_line': lambda coord: game.man.canvas.create_line(coord, width=3)
+            'wide_line': lambda coord: self.canvas.create_line(coord, width=5),
+            'oval': lambda coord: self.canvas.create_oval(coord, width=5),
+            'narrow_line': lambda coord: self.canvas.create_line(coord, width=3)
         }
         self.method = 'grid'
+        self.game_frame = game_frame
 
     def create_frame(self):
         super().create_frame()
 
-        self.canvas = Canvas(self.frame, width=250,
+        self.canvas = Canvas(self.game_frame, width=250,
                              height=300, bg='white', bd=0)
-        self.canvas.grid(row=0, column=0, columnspan=2)
-        return self.frame
+        self.canvas.grid(row=0, column=0)
+        return self.game_frame
 
     def draw(self, step_count):  # увеличивать после вызова
         step = steps[step_count]
@@ -125,17 +182,17 @@ class Keyboard(FrameConstructor):
 
 
 class Word(FrameConstructor):
-    def __init__(self, frame, **config):
+    def __init__(self, game, frame, **config):
         super().__init__(frame, **config)
-
+        self.game = game
         self.current_word = ''
         self.word_mask = ''
         self.step_count = 0
 
-    def choose_word(self):
+    def choose_word(self, game):
         words = []
-        self.lbl_word = Label(root, text='', font=24)
-        self.lbl_word.pack(padx=20, pady=20)
+        self.lbl_word = Label(self.root_frame, text='', font=24)
+        self.lbl_word.grid()
         file = open('countries.txt', encoding='utf-8')
 
         for line in file:
@@ -167,75 +224,28 @@ class Word(FrameConstructor):
                 print(self.word_mask)
                 guess = True
         if not guess:
-            game.man.draw(self.step_count)
+            self.game.man.draw(self.step_count)
             self.step_count += 1
-        game.resume_game()
-        game.set_game_label()
+        self.game.resume_game()
+        self.game.set_game_label()
+
+
+def main():
+    root_frame = Tk()
+    root_frame.geometry('600x500')
+    root_frame.title('Hangman')
+    photo = ImageTk.PhotoImage(Image.open('icon.png'))
+    root_frame.iconphoto(False, photo)
+
+    menu = Menu(root_frame)
+
+    print(isinstance(menu, Menu))
+    print(isinstance(menu, FrameConstructor))
+    print(isinstance(menu, object))
+    print(type(menu))
+
+    mainloop()
 
 
 if __name__ == '__main__':
-    root = Tk()
-    root.geometry('600x500')
-    root.title('Hangman')
-    photo = ImageTk.PhotoImage(Image.open('icon.png'))
-    root.iconphoto(False, photo)
-
-    menu = MenuGame(root)
-    # menu.render_pack()
-
-    word = Word(root)
-    word.choose_word()
-
-    game = Game(root, word)
-
-    game.keyboard.create_keyboard_btn()
-
-    # print(isinstance(menu, MenuGame))
-    # print(isinstance(menu, FrameConstructor))
-    # print(isinstance(menu, object))
-    # print(type(menu))
-
-    steps = [
-        {
-            'type': 'wide_line',
-            'coords': (50, 250, 150, 250)
-        },
-        {
-            'type': 'wide_line',
-            'coords': (100, 250, 100, 50)
-        },
-        {
-            'type': 'wide_line',
-            'coords': (100, 50, 150, 50)
-        },
-        {
-            'type': 'wide_line',
-            'coords': (150, 50, 150, 80)
-        },
-        {
-            'type': 'oval',
-            'coords': (135, 80, 165, 110)
-        },
-        {
-            'type': 'narrow_line',
-            'coords': (150, 110, 150, 170)
-        },
-        {
-            'type': 'narrow_line',
-            'coords': (150, 120, 130, 150)
-        },
-        {
-            'type': 'narrow_line',
-            'coords': (150, 120, 170, 150)
-        },
-        {
-            'type': 'narrow_line',
-            'coords': (150, 170, 130, 200)
-        },
-        {
-            'type': 'narrow_line',
-            'coords': (150, 170, 170, 200)
-        }
-    ]
-
-    mainloop()
+    main()
